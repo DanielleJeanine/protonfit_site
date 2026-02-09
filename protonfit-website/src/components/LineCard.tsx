@@ -1,21 +1,25 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface LineCardProps {
-  imageSrc: string;
-  title: string;
+  id: number;
+  name: string;
   description: string;
+  imageUrl: string;
 }
 
-export default function LineCard({ imageSrc, title, description }: LineCardProps) {
+export default function LineCard({ id, name, description, imageUrl }: LineCardProps) {
   return (
-    <div className="bg-pf-gray rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <Image src={imageSrc} alt={title} width={300} height={200} objectFit="cover" className="w-full h-48 object-cover object-top" />
+    <div className="bg-pf-black rounded-lg overflow-hidden shadow-lg border border-pf-gray hover:shadow-xl transition-shadow duration-300 text-pf-white">
+      <Image src={imageUrl} alt={name} width={300} height={200} objectFit="cover" className="w-full h-48 object-cover object-top" />
       <div className="p-4">
-        <h3 className="text-lg font-display font-semibold text-pf-white mb-2">{title}</h3>
-        <p className="text-pf-white-transparent text-sm mb-4 font-sans">{description}</p>
-        <button className="w-full border border-pf-yellow text-pf-yellow py-2 rounded hover:bg-pf-yellow hover:text-pf-black transition-colors font-display font-bold">
-          VER PRODUTOS
-        </button>
+        <h3 className="text-lg font-display font-semibold mb-2">{name}</h3>
+        <p className="text-sm mb-4 font-sans text-pf-white-transparent">{description}</p>
+        <Link href={`/equipamentos/${id}`}>
+          <button className="w-full bg-pf-yellow text-pf-black font-display font-bold py-2 rounded hover:bg-pf-yellow-hover transition-colors">
+            VER PRODUTOS
+          </button>
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
+import { CartProvider } from "@/context/CartContext";
+
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -30,7 +32,9 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${montserrat.variable} ${openSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }

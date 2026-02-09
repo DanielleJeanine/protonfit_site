@@ -1,4 +1,4 @@
-import { Lightbulb, ThumbsUp, ShieldCheck } from 'lucide-react'; // Ícones para Valores
+import { Lightbulb, ThumbsUp, ShieldCheck } from 'lucide-react';
 
 export default function OurValuesSection() {
   const values = [
