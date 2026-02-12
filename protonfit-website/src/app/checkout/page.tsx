@@ -1,3 +1,5 @@
+// src/app/checkout/page.tsx
+
 "use client";
 
 import Header from "@/components/Header";
@@ -6,9 +8,10 @@ import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import { useState } from "react";
 import { Trash2, Plus, Minus } from "lucide-react";
+import { sendBudgetRequest } from "@/lib/data";
 
 export default function CheckoutPage() {
-  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
+  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart, clearCart } = useCart();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,18 +23,65 @@ export default function CheckoutPage() {
     message: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: string; text: string } | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Modificar envio de dados para o backend
-    alert("Pedido de orçamento enviado com sucesso! (Verifique o console para os dados)");
-    // Limpar carrinho e formulário após o envio
-    // setCartItems([]); 
-    // setFormData({ ... });
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    if (cartItems.length === 0) {
+      setSubmitMessage({ type: "error", text: "Seu carrinho está vazio. Adicione produtos para solicitar um orçamento." });
+      setIsSubmitting(false);
+      return;
+    }
+
+    
+    const productsToBudget = cartItems.map(item => ({
+      productName: item.name,
+      productCode: item.code,
+      productQuantity: item.quantity,
+    }));
+
+    
+    const budgetData = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.company || undefined, 
+      message: formData.message || undefined, 
+      products: productsToBudget,
+    };
+
+    try {
+      const response = await sendBudgetRequest(budgetData);
+      if (response.status >= 200 && response.status < 300) {
+        setSubmitMessage({ type: "success", text: response.message || "Pedido de orçamento enviado com sucesso!" });
+        clearCart(); 
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          state: "",
+          city: "",
+          message: "",
+        });
+      } else {
+        setSubmitMessage({ type: "error", text: response.message || "Erro ao enviar pedido de orçamento." });
+      }
+    } catch (error) {
+      console.error("Erro ao enviar pedido de orçamento:", error);
+      setSubmitMessage({ type: "error", text: "Ocorreu um erro inesperado ao enviar o pedido." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,6 +91,12 @@ export default function CheckoutPage() {
         <h1 className="text-3xl md:text-4xl font-display font-extrabold text-pf-yellow mb-8 text-center">
           Finalizar Orçamento
         </h1>
+
+        {submitMessage && (
+          <div className={`p-4 rounded-md mb-6 text-center ${submitMessage.type === "success" ? "bg-green-500" : "bg-red-500"}`}>
+            {submitMessage.text}
+          </div>
+        )}
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Formulário de Dados do Cliente */}
@@ -133,9 +189,10 @@ export default function CheckoutPage() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-pf-yellow text-pf-black font-display font-bold py-3 rounded hover:bg-pf-yellow-hover transition-colors text-lg"
+                disabled={isSubmitting || cartItems.length === 0}
+                className="w-full bg-pf-yellow text-pf-black font-display font-bold py-3 rounded hover:bg-pf-yellow-hover transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Enviar Pedido de Orçamento
+                {isSubmitting ? "Enviando..." : "Enviar Pedido de Orçamento"}
               </button>
             </form>
           </div>

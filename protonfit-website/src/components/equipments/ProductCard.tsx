@@ -18,6 +18,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {
         id: product.id,
         name: product.name,
+        code: product.code,
         imageUrl: product.imageUrl,
         quantity: 0,
       },

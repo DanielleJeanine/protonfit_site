@@ -48,6 +48,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         {
           id: product.id,
           name: product.name,
+          code: product.code,
           imageUrl: product.imageUrl,
           quantity: 0,
         },
