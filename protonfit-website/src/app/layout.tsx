@@ -7,15 +7,16 @@ import "./globals.css";
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["600", "700"],
+  weight: ["600", "700", "800"],
   display: "swap",
 });
 const openSans = Open_Sans({
   subsets: ["latin"],
   variable: "--font-open-sans",
-  weight: ["400", "600"],
+  weight: ["400", "600", "700", "800"],
   display: "swap",
 });
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,17 +25,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="pt-BR"
       className={`${montserrat.variable} ${openSans.variable}`}
     >
-      <body>
+      <body className="font-sans">
         <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );
 }
+

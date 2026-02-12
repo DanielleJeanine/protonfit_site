@@ -12,7 +12,7 @@ export default function LinesSection() {
     const fetchCategories = async () => {
       const response = await getCategories();
       if (response.status === 200) {
-        setCategories(response.data);
+        setCategories(response.data || []);
       }
     };
     fetchCategories();

@@ -14,7 +14,6 @@ export default function LineCard({ id, name, description, imageUrl }: LineCardPr
       <Image src={imageUrl} alt={name} width={300} height={200} objectFit="cover" className="w-full h-48 object-cover object-top" />
       <div className="p-4">
         <h3 className="text-lg font-display font-semibold mb-2">{name}</h3>
-        <p className="text-sm mb-4 font-sans text-pf-white-transparent">{description}</p>
         <Link href={`/equipamentos/${id}`}>
           <button className="w-full bg-pf-yellow text-pf-black font-display font-bold py-2 rounded hover:bg-pf-yellow-hover transition-colors">
             VER PRODUTOS

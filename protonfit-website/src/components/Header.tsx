@@ -34,7 +34,7 @@ export default function Header() {
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await getCategories();
-      if (response.status === 200) {
+      if (response.status === 200 && response.data) {
         setCategories(response.data);
       }
     };
