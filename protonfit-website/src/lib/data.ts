@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api from './api';
-import { Category, PaginatedResponse, Product, BudgetProductDTO, BudgetRequestDTO } from '@/types';
+import { Category, PaginatedResponse, Product, ContactRequestDTO, BudgetRequestDTO } from '@/types';
 
 
 export async function getCategories(): Promise<{ status: number; data: Category[] | null }> {
@@ -69,6 +69,25 @@ export async function getProductsByCategoryId(
   }
 }
 
+export async function searchProducts(
+  query: string,
+  page: number = 0,
+  size: number = 12
+): Promise<{ status: number; data: PaginatedResponse<Product> | null; message?: string }> {
+  try {
+    const response = await api.get<PaginatedResponse<Product>>(`/products/search?name=${query}&page=${page}&size=${size}`);
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      console.error(`Erro ao buscar produtos por "${query}":`, error.response.data);
+      return { status: error.response.status, data: null, message: error.response.data.message || 'Erro ao buscar produtos.' };
+    } else {
+      console.error(`Erro desconhecido ao buscar produtos por "${query}":`, error);
+      return { status: 500, data: null, message: 'Erro desconhecido ao buscar produtos.' };
+    }
+  }
+}
+
 export async function sendBudgetRequest(budgetData: BudgetRequestDTO): Promise<{ status: number; message?: string }> {
   try {    
     const response = await api.post('/budget', budgetData);
@@ -80,6 +99,21 @@ export async function sendBudgetRequest(budgetData: BudgetRequestDTO): Promise<{
     } else {
       console.error("Erro desconhecido ao enviar pedido de orçamento:", error);
       return { status: 500, message: 'Erro desconhecido ao enviar pedido de orçamento.' };
+    }
+  }
+}
+
+  export async function sendContactRequest(contactData: ContactRequestDTO): Promise<{ status: number; message?: string }> {
+  try {    
+    const response = await api.post('/contact', contactData);
+    return { status: response.status, message: response.data.message || 'Pedido de contato enviado com sucesso!' };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Erro ao enviar pedido de contato:", error.response.data);
+      return { status: error.response.status, message: error.response.data.message || 'Erro ao enviar pedido de contato.' };
+    } else {
+      console.error("Erro desconhecido ao enviar pedido de contato:", error);
+      return { status: 500, message: 'Erro desconhecido ao enviar pedido de contato.' };
     }
   }
 }

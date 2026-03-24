@@ -19,9 +19,9 @@ export default function EquipmentCategoryPage({ params }: CategoryPageProps) {
   const categoryId = parseInt(params.categoryId, 10);
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState(0); // Estado para a página atual (começa em 0)
-  const [totalPages, setTotalPages] = useState(0); // Estado para o total de páginas
-  const productsPerPage = 12; // Defina o tamanho da página, deve ser o mesmo usado no backend
+  const [currentPage, setCurrentPage] = useState(0); 
+  const [totalPages, setTotalPages] = useState(0); 
+  const productsPerPage = 12;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,15 +49,15 @@ export default function EquipmentCategoryPage({ params }: CategoryPageProps) {
       }
     };
     fetchData();
-  }, [categoryId, currentPage]); // Re-executa o efeito quando categoryId ou currentPage muda
+  }, [categoryId, currentPage]);
 
   if (!category) {
-    return null; // Ou um componente de loading
+    return null; 
   }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Opcional: scroll para o topo da lista de produtos ao mudar de página
+
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
   };
 
@@ -67,10 +67,6 @@ export default function EquipmentCategoryPage({ params }: CategoryPageProps) {
       <main className="flex-grow">
         <EquipmentHeroSection category={category} />
         <div className="container mx-auto px-4 md:px-8 py-12 md:py-16 flex flex-col lg:flex-row gap-8">
-          {/* Sidebar de Filtro (se houver) */}
-          {/* <aside className="w-full lg:w-1/4">
-            <EquipmentSidebar currentCategoryId={categoryId} />
-          </aside> */}
 
           {/* Conteúdo Principal: Produtos */}
           <section className="w-full">

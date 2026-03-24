@@ -29,6 +29,14 @@ export interface BudgetRequestDTO {
   products: BudgetProductDTO[];
 }
 
+export interface ContactRequestDTO {
+  name: string;
+  email: string;
+  phone: string;
+  company?: string; 
+  message?: string;
+}
+
 export interface ApiResponse<T> {
   data: T;
   message?: string;
