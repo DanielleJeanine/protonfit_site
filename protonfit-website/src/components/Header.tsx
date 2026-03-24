@@ -44,7 +44,6 @@ export default function Header() {
     if (query) {
       router.push(`/search?query=${encodeURIComponent(query)}`);
       setIsSearchOpen(false);
-      console.log("Pesquisando por:", query);
     }
   };
 
@@ -60,7 +59,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-pf-black py-4 shadow-md border-b border-pf-gray">
-      <nav className="container mx-auto flex items-center justify-between px-4 md:px-8">
+      <nav className="container mx-auto flex items-center justify-between px-4 md:px-8 relative">
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center">
@@ -121,15 +120,13 @@ export default function Header() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-60 text-white placeholder-gray-400"
+                  className="w-60 text-white placeholder-gray-400 direction-ltr"
                   autoFocus
                 />
-                {/* Botão de lupa para buscar */}
                 <Button onClick={handleSearch} variant="secondary">
                   <Search />
                 </Button>
-                {/* Botão para fechar a pesquisa */}
-                <Button onClick={() => setIsSearchOpen(false)} variant="secondary" >
+                <Button onClick={() => setIsSearchOpen(false)} variant="secondary">
                   <X />
                 </Button>
               </div>
@@ -142,102 +139,90 @@ export default function Header() {
         </div>
 
         {/* Carrinho e Menu Mobile */}
-        <div className="flex items-center gap-4">
-          {/* Carrinho Desktop */}
-          <div className="hidden md:flex items-center relative">
-            <Link href="/checkout">
-              <ShoppingCart className="cursor-pointer text-pf-white hover:text-pf-yellow" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
-          </div>
+        <div className="flex items-center gap-4 md:hidden relative">
+          {/* Botão Pesquisa Mobile */}
+          <button onClick={() => setIsSearchOpen(!isSearchOpen)}>
+            <Search className="text-pf-white hover:text-pf-yellow" />
+          </button>
 
-          {/* Mobile */}
-          <div className="md:hidden flex items-center gap-2 relative">
-            {/* Botão Pesquisa Mobile */}
-            <button onClick={() => setIsSearchOpen(!isSearchOpen)}>
-              <Search className="text-pf-white hover:text-pf-yellow" />
-            </button>
+          {/* Barra de Pesquisa Mobile */}
+          {isSearchOpen && (
+            <div className="fixed top-16 left-0 w-screen px-4 py-2 bg-pf-black flex items-center gap-2 z-60 shadow-lg">
+              <Input
+                type="text"
+                placeholder="Buscar produtos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                autoFocus
+                className="text-white placeholder-gray-400 direction-ltr flex-grow"
+              />
+              <Button onClick={handleSearch}>
+                <Search />
+              </Button>
+              <Button onClick={() => setIsSearchOpen(false)}>
+                <X />
+              </Button>
+            </div>
+          )}
 
-            {isSearchOpen && (
-              <div className="absolute top-full left-0 w-full px-4 mt-2 bg-pf-black flex items-center gap-2 z-50">
-                <Input
-                  type="text"
-                  placeholder="Buscar produtos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  autoFocus
-                  className="text-white placeholder-gray-400"
-                />
-                <Button onClick={handleSearch}>
-                  <Search />
-                </Button>
-                <Button onClick={() => setIsSearchOpen(false)}>
-                  <X />
-                </Button>
-              </div>
-            )}
+          {/* Menu Mobile */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="text-pf-white p-1">
+                <Menu className="h-7 w-7" />
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="bg-pf-black border-pf-gray text-pf-white w-[280px] pl-3"
+            >
+              <SheetTitle className="text-pf-yellow font-display text-xl mb-8">
+                Menu ProtonFit
+              </SheetTitle>
+              <div className="flex flex-col space-y-6 mt-10">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`text-xl font-display font-bold hover:text-pf-yellow transition-colors ${
+                      pathname === link.href ? "text-pf-yellow" : ""
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <button className="text-pf-white p-1">
-                  <Menu className="h-7 w-7" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="bg-pf-black border-pf-gray text-pf-white w-[280px] pl-3"
-              >
-                <SheetTitle className="text-pf-yellow font-display text-xl mb-8">
-                  Menu ProtonFit
-                </SheetTitle>
-                <div className="flex flex-col space-y-6 mt-10">
-                  {navLinks.map((link) => (
+                {/* Categorias Mobile */}
+                <div className="border-t border-pf-gray-medium pt-4 mt-4">
+                  <h4 className="text-pf-yellow font-display font-bold mb-2">
+                    Linhas de Equipamentos
+                  </h4>
+                  {categories.map((category) => (
                     <Link
-                      key={link.name}
-                      href={link.href}
-                      className={`text-xl font-display font-bold hover:text-pf-yellow transition-colors ${
-                        pathname === link.href ? "text-pf-yellow" : ""
+                      key={category.id}
+                      href={`/equipamentos/${category.id}`}
+                      className={`block py-2 text-lg font-display hover:text-pf-yellow transition-colors ${
+                        pathname === `/equipamentos/${category.id}` ? "text-pf-yellow" : ""
                       }`}
                     >
-                      {link.name}
+                      {category.name}
                     </Link>
                   ))}
-                  {/* Categorias Mobile */}
-                  <div className="border-t border-pf-gray-medium pt-4 mt-4">
-                    <h4 className="text-pf-yellow font-display font-bold mb-2">
-                      Linhas de Equipamentos
-                    </h4>
-                    {categories.map((category) => (
-                      <Link
-                        key={category.id}
-                        href={`/equipamentos/${category.id}`}
-                        className={`block py-2 text-lg font-display hover:text-pf-yellow transition-colors ${
-                          pathname === `/equipamentos/${category.id}` ? "text-pf-yellow" : ""
-                        }`}
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                    <div className="mt-4 relative">
-                      <Link href="/checkout">
-                        <ShoppingCart className="cursor-pointer hover:text-pf-yellow" />
-                        {cartItemCount > 0 && (
-                          <span className="absolute -top-3 right bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {cartItemCount}
-                          </span>
-                        )}
-                      </Link>
-                    </div>
+                  <div className="mt-4 relative">
+                    <Link href="/checkout">
+                      <ShoppingCart className="cursor-pointer hover:text-pf-yellow" />
+                      {cartItemCount > 0 && (
+                        <span className="absolute -top-3 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                          {cartItemCount}
+                        </span>
+                      )}
+                    </Link>
                   </div>
                 </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
     </header>
