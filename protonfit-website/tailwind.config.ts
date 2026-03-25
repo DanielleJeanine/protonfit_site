@@ -17,7 +17,7 @@ const config: Config = {
     },
     extend: {
       colors: {
-        /* 🎯 CORES PROTONFIT — mantidas */
+        /* 🎯 CORES PROTONFIT */
         'pf-black': '#1A1A1A',
         'pf-yellow': '#F0A50C',
         'pf-yellow-hover': '#FFF44F',
