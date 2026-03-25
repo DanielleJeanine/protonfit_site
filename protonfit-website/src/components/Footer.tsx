@@ -22,7 +22,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-2 hover:text-pf-yellow transition-colors"
-              aria-label="Instagram da ProtonFit"
+              aria-label="Whatsapp Comercial da ProtonFit"
               >
               <FaWhatsapp className="text-pf-yellow h-6 w-6" />
               <p className="font-bold">(95) 9 9124-2800</p>
