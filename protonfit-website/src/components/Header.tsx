@@ -136,13 +136,35 @@ export default function Header() {
               </button>
             )}
           </div>
+
+          {/* Carrinho Desktop */}
+          <div className="hidden md:flex items-center relative">
+            <Link href="/checkout">
+              <ShoppingCart className="cursor-pointer text-pf-white hover:text-pf-yellow" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
 
-        {/* Carrinho e Menu Mobile */}
-        <div className="flex items-center gap-4 md:hidden relative">
+        {/* Mobile: Carrinho, pesquisa e menu */}
+        <div className="flex items-center gap-2 md:hidden relative">
+          {/* Carrinho Mobile */}
+          <Link href="/checkout" className="relative">
+            <ShoppingCart className="text-pf-white hover:text-pf-yellow h-6 w-6" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </Link>
+
           {/* Botão Pesquisa Mobile */}
           <button onClick={() => setIsSearchOpen(!isSearchOpen)}>
-            <Search className="text-pf-white hover:text-pf-yellow" />
+            <Search className="text-pf-white hover:text-pf-yellow h-6 w-6" />
           </button>
 
           {/* Barra de Pesquisa Mobile */}
@@ -209,16 +231,6 @@ export default function Header() {
                       {category.name}
                     </Link>
                   ))}
-                  <div className="mt-4 relative">
-                    <Link href="/checkout">
-                      <ShoppingCart className="cursor-pointer hover:text-pf-yellow" />
-                      {cartItemCount > 0 && (
-                        <span className="absolute -top-3 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {cartItemCount}
-                        </span>
-                      )}
-                    </Link>
-                  </div>
                 </div>
               </div>
             </SheetContent>

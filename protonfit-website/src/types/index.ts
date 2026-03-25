@@ -24,7 +24,9 @@ export interface BudgetRequestDTO {
   name: string;
   email: string;
   phone: string;
-  company?: string; 
+  company: string;
+  state: string;
+  city: string; 
   message?: string;
   products: BudgetProductDTO[];
 }
@@ -33,7 +35,9 @@ export interface ContactRequestDTO {
   name: string;
   email: string;
   phone: string;
-  company?: string; 
+  company: string;
+  state: string;
+  city: string; 
   message?: string;
 }
 

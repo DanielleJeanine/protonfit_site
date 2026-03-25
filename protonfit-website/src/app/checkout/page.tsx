@@ -19,10 +19,51 @@ export default function CheckoutPage() {
     email: "",
     phone: "",
     message: "",
+    city: "",
+    state: "",
   });
+
+  const states = [
+    "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES",
+    "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR",
+    "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC",
+    "SP", "SE", "TO",
+  ];
+
+  const [cities, setCities] = useState<string[]>([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: string; text: string } | null>(null);
+
+  const handleStateChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const uf = e.target.value;
+
+    setFormData((prev) => ({
+      ...prev,
+      state: uf,
+      city: "",
+    }));
+
+    if (!uf) {
+      setCities([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`,
+      );
+
+      const data = await response.json();
+      const cityNames = data.map((item: any) => item.nome);
+      cityNames.sort((a: string, b: string) => a.localeCompare(b));
+
+      setCities(cityNames);
+    } catch (error) {
+      console.error("Erro ao buscar cidades:", error);
+      setCities([]);
+    }
+  };
 
   const formatPhone = (value: string) => {
   const numbers = value.replace(/\D/g, "");
@@ -40,7 +81,7 @@ export default function CheckoutPage() {
   }
 };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
   const { name, value } = e.target;
 
   if (name === "phone") {
@@ -76,7 +117,9 @@ export default function CheckoutPage() {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
-      company: formData.company || undefined, 
+      company: formData.company,
+      city: formData.city,
+      state: formData.state, 
       message: formData.message || undefined, 
       products: productsToBudget,
     };
@@ -91,6 +134,8 @@ export default function CheckoutPage() {
           company: "",
           email: "",
           phone: "",
+          city: "",
+          state: "",
           message: "",
         });
       } else {
@@ -170,6 +215,60 @@ export default function CheckoutPage() {
                   required
                   className="w-full p-3 rounded bg-pf-gray border border-pf-gray-hover focus:ring-2 focus:ring-pf-yellow focus:border-transparent outline-none text-pf-white"
                 />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-4">
+                <div>
+                  <label
+                    htmlFor="state"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Estado
+                  </label>
+                  <select
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleStateChange}
+                    required
+                    className="w-full p-3 rounded bg-pf-gray border border-pf-gray-hover focus:ring-2 focus:ring-pf-yellow outline-none text-pf-white"
+                  >
+                    <option value="">Selecione o estado</option>
+                    {states.map((uf) => (
+                      <option key={uf} value={uf}>
+                        {uf}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                  <div>
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Cidade
+                  </label>
+                  <select
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                    disabled={!cities.length}
+                    className="w-full p-3 rounded bg-pf-gray border border-pf-gray-hover focus:ring-2 focus:ring-pf-yellow outline-none text-pf-white disabled:opacity-50"
+                  >
+                    <option value="">
+                      {cities.length
+                        ? "Selecione a cidade"
+                        : "Selecione um estado primeiro"}
+                    </option>
+
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-1">Mensagem / Observação</label>

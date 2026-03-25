@@ -27,9 +27,17 @@ export default function Footer() {
               <span className="text-pf-gray-medium text-xs">SAC</span>
             </div>
             <div className="flex flex-col items-center text-center space-y-2">
+              <a
+              href="https://www.instagram.com/protonfit_oficial?igsh=OXVhb3h1emRvcWk2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-2 hover:text-pf-yellow transition-colors"
+              aria-label="Instagram da ProtonFit"
+              >
               <FaInstagram className="text-pf-yellow h-6 w-6" />
               <p className="font-bold">@protonfit_oficial</p>
               <span className="text-pf-gray-medium text-xs">INSTAGRAM</span>
+              </a>
             </div>
           </div>
 
