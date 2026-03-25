@@ -6,7 +6,7 @@ export default function WhoWeAreSection() {
         <p className="text-base md:text-lg max-w-4xl mx-auto leading-relaxed font-sans">
           A ProtonFit Equipamentos é uma empresa brasileira criada para fortalecer a conexão entre pessoas, movimento e qualidade de vida. 
           Acreditamos no exercício físico como uma força transformadora, capaz de impactar positivamente o corpo, a mente e o bem-estar.
-           Por isso, disponibilizamos equipamentos fitness que unem tecnologia, resistência e alto desempenho, pensados para entregar segurança, 
+           Por isso, importamos equipamentos fitness que unem tecnologia, resistência e alto desempenho, pensados para entregar segurança, 
            conforto e resultados consistentes em academias, condomínios, empresas e espaços residenciais.
         </p>
       </div>

@@ -197,7 +197,7 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="bg-pf-black border-pf-gray text-pf-white w-[280px] pl-3"
+              className="bg-pf-black border-pf-gray text-pf-white w-[280px] pl-3 overflow-y-auto max-h-screen"
             >
               <SheetTitle className="text-pf-yellow font-display text-xl mb-8">
                 Menu ProtonFit
