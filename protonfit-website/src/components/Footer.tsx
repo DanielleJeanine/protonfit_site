@@ -17,9 +17,17 @@ export default function Footer() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
             <div className="flex flex-col items-center text-center space-y-2">
+              <a
+              href="https://wa.me/message/FEHVAS3RPBTCL1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-2 hover:text-pf-yellow transition-colors"
+              aria-label="Whatsapp Comercial da ProtonFit"
+              >
               <FaWhatsapp className="text-pf-yellow h-6 w-6" />
               <p className="font-bold">(95) 9 9124-2800</p>
               <span className="text-pf-gray-medium text-xs">COMERCIAL</span>
+              </a>
             </div>
             <div className="flex flex-col items-center text-center space-y-2">
               <FaWhatsapp className="text-pf-yellow h-6 w-6" />
